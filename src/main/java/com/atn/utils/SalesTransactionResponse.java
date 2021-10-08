@@ -12,7 +12,7 @@ import com.atn.models.SalesTransaction;
  *
  */
 public class SalesTransactionResponse {
-	private SalesTransaction salesTransaction;
+	private SalesTransaction data;
 
 	private Boolean error;
 	private String Message;
@@ -26,12 +26,14 @@ public class SalesTransactionResponse {
 		this.validationError = validationError;
 	}
 
-	public SalesTransaction getSalesTransaction() {
-		return salesTransaction;
+	
+
+	public SalesTransaction getData() {
+		return data;
 	}
 
-	public void setSalesTransaction(SalesTransaction salesTransaction) {
-		this.salesTransaction = salesTransaction;
+	public void setData(SalesTransaction data) {
+		this.data = data;
 	}
 
 	public Boolean getError() {

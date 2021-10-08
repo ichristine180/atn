@@ -19,7 +19,7 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.atn.controller"))
-                .paths(regex("/sales.*"))
+                .paths(regex("/api/sales.*"))
                 .build()
                 .apiInfo(metaData());
     }

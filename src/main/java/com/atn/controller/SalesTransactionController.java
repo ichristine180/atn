@@ -16,15 +16,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.atn.models.SalesTransaction;
 import com.atn.services.IsalesTransactionService;
 import com.atn.utils.MnoRealAccountRecorderResponse;
+import com.atn.utils.Response;
 import com.atn.utils.SalesTransactionResponse;
 
 @RestController
-@RequestMapping("/sales")
+@RequestMapping("/api/sales")
 public class SalesTransactionController {
 	@Autowired
 	private IsalesTransactionService salesService;
@@ -32,6 +34,7 @@ public class SalesTransactionController {
 	@PostMapping("/resell")
 	public ResponseEntity<SalesTransactionResponse> createSalesTransaction(@RequestBody @Valid SalesTransaction st,
 			final BindingResult result) {
+		System.out.println("got here");
 		// check if we have validation error
 		if (result.hasErrors()) {
 			SalesTransactionResponse response = new SalesTransactionResponse();
@@ -50,7 +53,7 @@ public class SalesTransactionController {
 			st.setDate(LocalDate.now());
 			SalesTransaction savedSt = salesService.create(st);
 			SalesTransactionResponse response = new SalesTransactionResponse();
-			response.setSalesTransaction(savedSt);
+			response.setData(savedSt);
 			response.setError(false);
 			response.setMessage("Transaction created");
 			return new ResponseEntity<>(response, HttpStatus.OK);
@@ -60,9 +63,16 @@ public class SalesTransactionController {
 	}
 
 	@GetMapping("/transactions/{accountId}")
-	public List<SalesTransaction> getResellerTransction(@PathVariable String accountId) {
+	public ResponseEntity<Response> getResellerTransction(@PathVariable String accountId,
+			@RequestParam("pageNumber") int pageNumber, @RequestParam("pageSize") int size,
+			@RequestParam("searchBy") String searchBy) {
 		try {
-			return salesService.findSalesTransactionBySeller(accountId);
+			Response res = new Response();
+			res.setCurrentPage(pageNumber);
+			res.setTotalItems(size);
+			res.setData(salesService.findSalesTransactionBySeller(accountId));
+			return new ResponseEntity<>(res, HttpStatus.OK);
+
 		} catch (Exception ex) {
 			throw ex;
 		}
