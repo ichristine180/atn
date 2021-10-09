@@ -17,10 +17,10 @@ public interface IsalesTransactionService {
 
 	public SalesTransaction create(SalesTransaction st);
 
-	public List<SalesTransaction> findSalesTransactionBySeller(String accountId);
-
-	public List<SalesTransaction> findFilteredTransaction();
+	public List<SalesTransaction> findSalesTransactionBySeller(String accountId,int size);
 	
 	public Long AmountBymnoRealAccountRecorder(int mnRealAccountRecorder);
+
+	public List<SalesTransaction> filterTransaction(String transactionDate, String status,int size);
 
 }

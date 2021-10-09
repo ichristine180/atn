@@ -1,6 +1,6 @@
 package com.atn.controller;
-
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,7 +50,9 @@ public class SalesTransactionController {
 		}
 		// If no error we proceed
 		try {
-			st.setDate(LocalDate.now());
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+			LocalDateTime now = LocalDateTime.now();
+			st.setDate(dtf.format(now));
 			SalesTransaction savedSt = salesService.create(st);
 			SalesTransactionResponse response = new SalesTransactionResponse();
 			response.setData(savedSt);
@@ -62,15 +64,32 @@ public class SalesTransactionController {
 		}
 	}
 
-	@GetMapping("/transactions/{accountId}")
-	public ResponseEntity<Response> getResellerTransction(@PathVariable String accountId,
-			@RequestParam("pageNumber") int pageNumber, @RequestParam("pageSize") int size,
-			@RequestParam("searchBy") String searchBy) {
+	@GetMapping("/{resellerId}")
+	public ResponseEntity<Response> getResellerTransction(@PathVariable String resellerId,
+			@RequestParam("pageNumber") int pageNumber, @RequestParam("pageSize") int size) {
 		try {
 			Response res = new Response();
 			res.setCurrentPage(pageNumber);
-			res.setTotalItems(size);
-			res.setData(salesService.findSalesTransactionBySeller(accountId));
+			List<SalesTransaction> result = salesService.findSalesTransactionBySeller(resellerId, size);
+			res.setTotalItems(result.size());
+			res.setData(result);
+			return new ResponseEntity<>(res, HttpStatus.OK);
+
+		} catch (Exception ex) {
+			throw ex;
+		}
+	}
+
+	@GetMapping("/filter")
+	public ResponseEntity<Response> filterTransaction(@RequestParam("currentPage") int currentPage,
+			@RequestParam("pageSize") int size, @RequestParam("transactionDate") String transactionDate,
+			@RequestParam("status") String status) {
+		try {
+			Response res = new Response();
+			res.setCurrentPage(currentPage);
+			List<SalesTransaction> result = salesService.filterTransaction(transactionDate, status, size);
+			res.setData(result);
+			res.setTotalItems(result.size());
 			return new ResponseEntity<>(res, HttpStatus.OK);
 
 		} catch (Exception ex) {

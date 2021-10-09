@@ -7,6 +7,7 @@ import java.util.List;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.atn.models.SalesTransaction;
@@ -32,25 +33,29 @@ public class SalesTransactionService implements IsalesTransactionService {
 	}
 
 	@Override
-	public List<SalesTransaction> findSalesTransactionBySeller(String accountId) {
+	public List<SalesTransaction> findSalesTransactionBySeller(String accountId,int size) {
 
 		try {
-			return salesRepository.findByAccountId(accountId);
+			return salesRepository.findByAccountId(accountId,PageRequest.of(0,size));
+		} catch (final Exception ex) {
+			throw ex;
+		}
+	}
+
+
+	@Override
+	public Long AmountBymnoRealAccountRecorder(int mnRealAccountRecorder) {
+		try {
+			return salesRepository.amountByMnoRealAccountRecorder(mnRealAccountRecorder);
 		} catch (final Exception ex) {
 			throw ex;
 		}
 	}
 
 	@Override
-	public List<SalesTransaction> findFilteredTransaction() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Long AmountBymnoRealAccountRecorder(int mnRealAccountRecorder) {
+	public List<SalesTransaction> filterTransaction(String transactionDate, String status,int size) {
 		try {
-			return salesRepository.amountByMnoRealAccountRecorder(mnRealAccountRecorder);
+			return salesRepository.filterTransactions(transactionDate,status,PageRequest.of(0,size));
 		} catch (final Exception ex) {
 			throw ex;
 		}

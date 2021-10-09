@@ -1,8 +1,5 @@
 package com.atn.models;
 
-import java.time.LocalDate;
-
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -53,7 +50,7 @@ public class SalesTransaction {
 	@Size(max = 12, message = "status must be 12 long")
 	@Column(name = "status", length = 12)
 	private String status;
-	private LocalDate date;
+	private String date;
 
 	public String getId() {
 		return id;
@@ -127,12 +124,41 @@ public class SalesTransaction {
 		this.status = status;
 	}
 
-	public LocalDate getDate() {
+	
+
+	/**
+	 * @return the date
+	 */
+	public String getDate() {
 		return date;
 	}
 
-	public void setDate(LocalDate date) {
+	/**
+	 * @param date the date to set
+	 */
+	public void setDate(String date) {
 		this.date = date;
+	}
+
+	/**
+	 * @param resellerMovementRecorder the resellerMovementRecorder to set
+	 */
+	public void setResellerMovementRecorder(Integer resellerMovementRecorder) {
+		this.resellerMovementRecorder = resellerMovementRecorder;
+	}
+
+	/**
+	 * @param mnoRealAccountRecorder the mnoRealAccountRecorder to set
+	 */
+	public void setMnoRealAccountRecorder(Integer mnoRealAccountRecorder) {
+		this.mnoRealAccountRecorder = mnoRealAccountRecorder;
+	}
+
+	/**
+	 * @param mnoNormalAccountRecorded the mnoNormalAccountRecorded to set
+	 */
+	public void setMnoNormalAccountRecorded(Integer mnoNormalAccountRecorded) {
+		this.mnoNormalAccountRecorded = mnoNormalAccountRecorded;
 	}
 
 	@Override
